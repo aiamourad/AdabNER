@@ -1,4 +1,4 @@
-# AdabNER — Arabic Digital Archive Books with Nested Entity Recognition
+# AdabNER: Arabic Digital Archive Books with Nested Entity Recognition
 
 [![Paper](https://img.shields.io/badge/Paper-aclanthology-2A6DB0?style=flat-square)](https://aclanthology.org/2026.acl-long.1541/)
 [![Dataset](https://img.shields.io/badge/Dataset-Zenodo_(coming_soon)-1682D4?style=flat-square)](https://doi.org/10.5281/zenodo.19468385)
