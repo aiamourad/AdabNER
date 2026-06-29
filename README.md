@@ -6,6 +6,7 @@
 [![Code](https://img.shields.io/badge/Code-GitHub-181717?style=flat-square&logo=github)](https://github.com/aiamourad/AdabNER)
 [![License](https://img.shields.io/badge/Data_License-Non--commercial_Research-2E8B57?style=flat-square)]()
 
+
 ---
 
 ## At a Glance
@@ -70,11 +71,11 @@ Biographies · Geography · History · Literary Criticism · Literature · Novel
 
 ### Architecture
 
-AdabNER frames nested NER as a multi-label token classification task. Each token's contextual representation from the BERT encoder passes through a dropout layer ($p = 0.1$) and a single linear classification head with **sigmoid** activation over $43$ BIO labels ($21$ entity types $\times \\{\mathrm{B}, \mathrm{I}\\}$, plus $\mathrm{O}$). Formally, each token $t_i$ is assigned a label vector $\hat{y}_i = \sigma(W h_i + b) \in [0, 1]^{43}$, and a label $\ell$ is active when $\hat{y}_{i,\ell} > \tau$. Because the labels are predicted independently rather than through a softmax, a token may carry several active labels at once, which is what allows overlapping mentions to be recovered in a single forward pass. The rare cases of same-type nesting (under $1\\%$ of mentions) are resolved with indexed labels such as `B-ORG` and `B-ORG_2`.
+AdabNER frames nested NER as a multi-label token classification task. Each token's contextual representation from the BERT encoder passes through a dropout layer ($p = 0.1$) and a single linear classification head with **sigmoid** activation over $43$ BIO labels ($21$ entity types $\times \\{\mathrm{B}, \mathrm{I}\\}$, plus $\mathrm{O}$). Because the labels are predicted independently rather than through a softmax, a token may carry several active labels at once, which is what allows overlapping mentions to be recovered in a single forward pass. The rare cases of same-type nesting (under $1\\%$ of mentions) are resolved with indexed labels such as `B-ORG` and `B-ORG_2`.
 
 ### Supervised Fine-Tuning
 
-Five Arabic encoders are fine-tuned under both the stratified and leave-book-out splits. The objective is focal loss, defined per label as $\mathrm{FL}(p_t) = -\alpha (1 - p_t)^{\gamma} \log(p_t)$, chosen to counter the severe class imbalance introduced by the BIO scheme and the long tail of entity types. Each configuration is run across three random seeds, and reported scores are the mean over those runs.
+Five Arabic encoders are fine-tuned under both the stratified and leave-book-out splits. The objective is focal loss, chosen to counter the severe class imbalance introduced by the BIO scheme and the long tail of entity types. Each configuration is run across three random seeds, and reported scores are the mean over those runs.
 
 | Hyperparameter | Value |
 |:---|:---|
@@ -83,7 +84,7 @@ Five Arabic encoders are fine-tuned under both the stratified and leave-book-out
 | Batch size | $16$ |
 | Max sequence length | $512$ |
 | Loss | Focal loss ($\alpha = 0.75$, $\gamma = 1.0$) |
-| Decision threshold | $\tau = 0.5$ |
+| Decision threshold | $0.5$ |
 | Epochs | $50$, early stopping (patience $= 5$) on validation macro-$F_1$ |
 | Seeds | $\\{42, 1, 123\\}$ |
 | Hardware | $3 \times$ NVIDIA RTX A6000 (48 GB) |
@@ -107,7 +108,6 @@ ood/    eval_wojood.py            # Train Wojood → zero-shot transfer to AdabN
         mmd_analysis.py           # MMD domain shift analysis
 joint/  train_joint.py            # Joint training: AdabNER + Wojood
 src/    model.py  dataset.py  metrics.py  preprocessing.py  llm_utils.py
-tests/  test_*.py
 data/   adabner/  wojood/
 ```
 
