@@ -39,8 +39,8 @@ config = Config()
 
 client = genai.Client(
     vertexai=True,
-    project='eng-name-478712-s1',
-    location='global'
+    project='',
+    location=''
 )
 async_client = client.aio
 
